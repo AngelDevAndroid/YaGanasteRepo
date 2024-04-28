@@ -6,12 +6,14 @@ import com.example.yaganaste.data.BancsModel
 import com.example.yaganaste.data.EntyBancsModel
 import com.example.yaganaste.repository.BancsRepository
 import com.example.yaganaste.repository.FavoriteRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
 class FavoriteBancViewModel @Inject constructor(private val repository: FavoriteRepository): ViewModel() {
 
     private val _listFavorite = MutableStateFlow(mutableListOf<EntyBancsModel>())

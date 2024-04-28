@@ -25,10 +25,10 @@ class BancsViewModel @Inject constructor(private val repository: BancsRepository
     val msgApiVm: StateFlow<String> get() = _msgApiVm
 
     init {
-        getGamesVm()
+        getListBancsRepo()
     }
 
-    private fun getGamesVm() {
+    private fun getListBancsRepo() {
 
         _shwPb.value = true
 

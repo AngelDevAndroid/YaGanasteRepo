@@ -7,7 +7,7 @@ import javax.inject.Inject
 
 class FavoriteRepository @Inject constructor(val favorite: FavoriteDao?) {
 
-    suspend fun addBancFav(banc: EntyBancsModel) {
+    fun addBancFav(banc: EntyBancsModel) {
         favorite?.addFavorite(banc)
     }
 

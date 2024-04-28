@@ -20,20 +20,25 @@ fun AppNavigation() {
             BancsList(navController)
         }
 
-        composable(AppScreens.BancsDetail.route + "/{img_game}/{desc_name}",
+        composable(AppScreens.BancsDetail.route + "/{namebanc}/{agebanc}/{descbanc}",
             arguments = listOf(
-                navArgument(name = "img_game") {
+                navArgument(name = "namebanc") {
                     type = NavType.StringType
                 },
-                navArgument("desc_name") {
+                navArgument("agebanc") {
+                    type = NavType.StringType
+                    defaultValue = "null"
+                },
+                navArgument("descbanc") {
                     type = NavType.StringType
                     defaultValue = "null"
                 }
             )
         ) { backStackEntry ->
-            val image = backStackEntry.arguments?.getString("img_game") ?: ""
-            val desc = backStackEntry.arguments?.getString("desc_name") ?: ""
-            BancsDetail(image, desc)
+            val name = backStackEntry.arguments?.getString("namebanc") ?: ""
+            val age = backStackEntry.arguments?.getString("agebanc") ?: ""
+            val desc = backStackEntry.arguments?.getString("descbanc") ?: ""
+            BancsDetail(name, age, desc)
         }
     }
 }

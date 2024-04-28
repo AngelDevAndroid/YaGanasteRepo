@@ -1,6 +1,8 @@
 package com.example.yaganaste.ui_views
 
+import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -21,6 +23,7 @@ import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -89,33 +92,19 @@ fun BancsList(nhc: NavController) {
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun BancListContent(
-    gamesViewModel: BancsViewModel = hiltViewModel(),
+    bancsViewModel: BancsViewModel = hiltViewModel(),
     padding: PaddingValues,
     nhc: NavController) {
 
-    val shwPb by gamesViewModel.shwPb.collectAsState(false)
-    val listGames by gamesViewModel.listGamesVm.collectAsState()
+    val shwPb by bancsViewModel.shwPb.collectAsState(false)
+    val listGames by bancsViewModel.listGamesVm.collectAsState()
 
-    val listGamesX: MutableList<BancsModel> = mutableListOf()
-
-    val msgApi by gamesViewModel.msgApiVm.collectAsState("")
+    val msgApi by bancsViewModel.msgApiVm.collectAsState("")
 
     var banc by remember {
         mutableStateOf(TextFieldValue(""))
     }
-    var objBanc by remember {
-        mutableStateOf(BancsModel())
-    }
-    val focusRequester = FocusRequester()
-    val keyboardController = LocalSoftwareKeyboardController.current
 
-    //LoadingPb(state = shwPb, msgApi = msgApi, false, onDismiss = {})
-
-    /*LaunchedEffect(banc) {
-        coroutineContext.job.invokeOnCompletion {
-            focusRequester.requestFocus()
-        }
-    }*/
     Spacer(modifier = Modifier.height(0.dp))
 
     Column(
@@ -166,7 +155,7 @@ fun ListBancs(search: TextFieldValue, listGames: MutableList<BancsModel>,
         items(items = listGames.filter {
             it.bankName?.contains(search.text)!!
         }) {list ->
-            ItemCardBancs(games = list, nhc = nhc)
+            ItemCardBancs(lBancs = list, nhc = nhc)
         }
     }
 
@@ -175,7 +164,7 @@ fun ListBancs(search: TextFieldValue, listGames: MutableList<BancsModel>,
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ItemCardBancs(games: BancsModel,
+fun ItemCardBancs(lBancs: BancsModel,
                   nhc: NavController) {
 
     val context = LocalContext.current
@@ -191,7 +180,7 @@ fun ItemCardBancs(games: BancsModel,
             )
             .fillMaxWidth(),
         onClick = {
-            nhc.navigate(AppScreens.BancsDetail.route + "/${games.bankName}" + "/${games.description}")
+            nhc.navigate(AppScreens.BancsDetail.route + "/${lBancs.bankName}" + "/${lBancs.age}" + "/${lBancs.description}")
         }) {
 
         Column(
@@ -205,7 +194,7 @@ fun ItemCardBancs(games: BancsModel,
                     .fillMaxWidth()
                     .height(200.dp),
                 painter = rememberAsyncImagePainter(
-                    model = games.url,
+                    model = lBancs.url,
                     imageLoader = ImageLoader
                         .Builder(context)
                         .crossfade(true)
@@ -216,51 +205,11 @@ fun ItemCardBancs(games: BancsModel,
 
             Row(modifier = Modifier.padding(top = 5.dp)) {
 
-                Text(text = games.bankName.toString(),
+                Text(text = lBancs.bankName.toString(),
                      modifier = Modifier,
                      fontWeight = FontWeight.Bold,
                      textAlign = TextAlign.Start)
-
-                FavoriteButton(modifier = Modifier.padding(8.dp), objBanc = games)
             }
         }
-    }
-}
-
-@Composable
-fun FavoriteButton(
-    vmBancs: FavoriteBancViewModel = hiltViewModel(),
-    modifier: Modifier = Modifier,
-    objBanc: BancsModel,
-    color: Color = Color(0xFF7E7B7C)
-) {
-
-    var isFavorite by remember { mutableStateOf(false) }
-    vmBancs.getLisFavorite()
-    val listBancs by vmBancs
-        .vmList.collectAsState()
-
-    IconToggleButton(
-        checked = isFavorite,
-        onCheckedChange = {
-            isFavorite = !isFavorite
-            val nBanc = EntyBancsModel(0, objBanc.bankName, objBanc.description, objBanc.age, objBanc.url)
-            vmBancs.addFavorite(nBanc)
-            Log.d("RESPONSE_API", " FAVORITE $listBancs")
-        }
-    ) {
-        Icon(
-            tint = color,
-            modifier = modifier.graphicsLayer {
-                scaleX = 1.3f
-                scaleY = 1.3f
-            },
-            imageVector = if (isFavorite) {
-                Icons.Filled.Favorite
-            } else {
-                Icons.Default.FavoriteBorder
-            },
-            contentDescription = null
-        )
     }
 }

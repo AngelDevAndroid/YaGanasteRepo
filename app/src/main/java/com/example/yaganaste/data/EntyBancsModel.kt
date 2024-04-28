@@ -8,9 +8,9 @@ import com.google.gson.annotations.SerializedName
 @Entity(tableName = "FAVORITES")
 data class EntyBancsModel(
     @PrimaryKey(autoGenerate = true)
-    val idBanc: Int? = null,
-    val bankName    : String? = null,
-    val description : String? = null,
-    val age         : Int?    = null,
-    val url         : String? = null,
+    var idBanc: Int? = null,
+    var bankName    : String? = null,
+    var description : String? = null,
+    var age         : Int?    = null,
+    var url         : String? = null,
 )
