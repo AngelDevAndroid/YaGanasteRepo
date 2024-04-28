@@ -87,7 +87,7 @@ fun BancsDetail(nameBanc: String?,
 
         Button(
             onClick = {
-                val nBanc = EntyBancsModel(0, nameBanc, descBanc, ageBanc.toInt(), "")
+                val nBanc = EntyBancsModel(null, nameBanc, descBanc, ageBanc.toInt(), "")
                 bancsViewModel.addFavorite(nBanc)
                 Toast.makeText(context, "Agregado a favoritos!", Toast.LENGTH_SHORT).show()
             }
